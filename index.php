@@ -1,18 +1,17 @@
 <?php
-$conn = mysqli_connect("localhost","root","","ctf");
+if (isset($_POST['user'])) {
+    $u = $_POST['user'];
+    $p = $_POST['pass'];
 
-if(isset($_POST['user'])) {
-  $u = $_POST['user'];
-  $p = $_POST['pass'];
-
-  $q = "SELECT * FROM users WHERE username='$u' AND password='$p'";
-  $r = mysqli_query($conn,$q);
-
-  if(mysqli_num_rows($r) > 0) {
-    echo "<script>alert('FLAG{level3_sqli_real}')</script>";
-  } else {
-    echo "<script>alert('Invalid login')</script>";
-  }
+    // Simulated vulnerable logic
+    if (
+        strpos($u, "' OR '1'='1") !== false ||
+        strpos($p, "' OR '1'='1") !== false
+    ) {
+        echo "<script>alert('FLAG{level3_sqli_simulated}')</script>";
+    } else {
+        echo "<script>alert('Invalid credentials')</script>";
+    }
 }
 ?>
 
@@ -20,14 +19,12 @@ if(isset($_POST['user'])) {
 <html>
 <head>
   <title>Employee Login</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<form method="POST" class="login-box">
-  <h2>Employee Portal</h2>
-  <input name="user" placeholder="Employee ID">
-  <input name="pass" type="password" placeholder="Password">
+<form method="POST">
+  <input name="user" placeholder="Username">
+  <input name="pass" type="password">
   <button>Login</button>
 </form>
 
